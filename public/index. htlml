@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULTIMATE FB BOT - RAJ MISHRA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            padding: 25px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header h1 span {
+            -webkit-text-fill-color: #fff;
+            background: none;
+            font-size: 14px;
+            font-weight: 400;
+            opacity: 0.6;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            background: #00c85320;
+            border: 1px solid #00c85340;
+            color: #69f0ae;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .status-badge .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #00c853;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        .uptime-box {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            font-size: 13px;
+            color: #aaa;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: #141414;
+            padding: 18px 22px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s;
+        }
+        .stat-card:hover {
+            border-color: rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .stat-card .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+            font-weight: 600;
+        }
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 6px;
+            color: #fff;
+        }
+        .stat-card .value.gold { color: #ffd700; }
+        .stat-card .value.green { color: #69f0ae; }
+        .stat-card .value.blue { color: #64b5f6; }
+        .stat-card .value.pink { color: #f48fb1; }
+        .stat-card .value.purple { color: #ce93d8; }
+        .stat-card .sub {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; }
+        }
+        .panel {
+            background: #111;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffd700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-title .badge {
+            font-size: 11px;
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            padding: 2px 12px;
+            border-radius: 50px;
+            font-weight: 400;
+        }
+        .task-item {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            border-left: 3px solid #ffd700;
+            transition: all 0.3s;
+        }
+        .task-item:hover {
+            background: #202020;
+        }
+        .task-item .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .task-item .task-id {
+            font-family: monospace;
+            font-size: 13px;
+            color: #ffd700;
+            font-weight: 600;
+        }
+        .task-item .task-user {
+            font-size: 13px;
+            color: #aaa;
+        }
+        .task-item .task-status {
+            font-size: 12px;
+            padding: 3px 14px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .task-item .task-status.running {
+            background: #00c85320;
+            color: #69f0ae;
+            border: 1px solid #00c85330;
+        }
+        .task-item .task-status.stopped {
+            background: #ff174420;
+            color: #ff8a80;
+            border: 1px solid #ff174430;
+        }
+        .task-item .task-status.expired {
+            background: #ff910020;
+            color: #ffab40;
+            border: 1px solid #ff910030;
+        }
+        .task-item .task-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .task-item .task-stats span {
+            font-size: 13px;
+            color: #888;
+        }
+        .task-item .task-stats span strong {
+            color: #fff;
+            font-weight: 600;
+        }
+        .session-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .session-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .session-dot.healthy {
+            background: #00c853;
+        }
+        .session-dot.unhealthy {
+            background: #ff1744;
+        }
+        .session-dot.recovering {
+            background: #ff9100;
+            animation: pulse 1s infinite;
+        }
+        .session-dot.current {
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        .telegram-panel {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .telegram-panel h3 {
+            color: #64b5f6;
+            font-size: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .telegram-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .telegram-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .telegram-btn:hover {
+            background: rgba(255, 215, 0, 0.15);
+            transform: translateY(-2px);
+            border-color: #ffd70040;
+        }
+        .telegram-btn.primary {
+            background: #ffd700;
+            color: #000;
+        }
+        .telegram-btn.primary:hover {
+            background: #ffed4a;
+        }
+        .telegram-btn.danger {
+            border-color: #ff174460;
+        }
+        .telegram-btn.danger:hover {
+            background: #ff174420;
+            border-color: #ff1744;
+        }
+        .telegram-btn.info {
+            border-color: #64b5f660;
+        }
+        .telegram-btn.info:hover {
+            background: #64b5f620;
+            border-color: #64b5f6;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: #1a1a1a;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 600px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        }
+        .modal h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        .modal .close-btn {
+            float: right;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal .close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+        }
+        .modal label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #aaa;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+        .modal textarea, .modal input, .modal select {
+            width: 100%;
+            padding: 12px 16px;
+            background: #111;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .modal textarea:focus, .modal input:focus {
+            border-color: #ffd700;
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+        .modal textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        .modal .submit-btn {
+            margin-top: 20px;
+            padding: 14px 30px;
+            background: #ffd700;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .modal .submit-btn:hover {
+            background: #ffed4a;
+            transform: scale(1.01);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ffd700; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .loading .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #222;
+            border-top-color: #ffd700;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 20px; }
+            .stat-card .value { font-size: 22px; }
+            .panel { padding: 16px; }
+            .task-item { padding: 12px; }
+            .telegram-btn { padding: 8px 14px; font-size: 12px; }
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #555;
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: #fff;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.4s ease;
+            display: none;
+        }
+        .toast.show { display: block; }
+        .toast.success { border-color: #00c853; }
+        .toast.error { border-color: #ff1744; }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .badge-gold {
+            background: #ffd70020;
+            color: #ffd700;
+            padding: 2px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .mt-10 { margin-top: 10px; }
+        .mb-10 { margin-bottom: 10px; }
+        .info-box {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background: #0a0a0a;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.8;
+        }
+        .info-box .highlight {
+            color: #69f0ae;
+        }
+        .info-box .warn {
+            color: #ffab40;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <h2 id="modalTitle">Action</h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="header">
+            <h1>
+                🤖 ULTIMATE FB BOT
+                <span>v3.0 · Per-Task Sessions</span>
+            </h1>
+            <div class="header-right">
+                <div class="status-badge">
+                    <span class="dot"></span>
+                    <span id="statusText">ONLINE</span>
+                </div>
+                <div class="uptime-box">⏱ <span id="uptimeDisplay">0s</span></div>
+                <button class="telegram-btn primary" onclick="refreshData()" style="padding:8px 16px;">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="label">📊 Total Tasks</div><div class="value gold" id="totalTasks">0</div></div>
+            <div class="stat-card"><div class="label">▶️ Running Tasks</div><div class="value green" id="runningTasks">0</div></div>
+            <div class="stat-card"><div class="label">👥 Users</div><div class="value blue" id="totalUsers">0</div></div>
+            <div class="stat-card"><div class="label">💬 Messages Sent</div><div class="value pink" id="messagesSent">0</div></div>
+            <div class="stat-card"><div class="label">🍪 Total Sessions</div><div class="value purple" id="totalSessions">0</div></div>
+            <div class="stat-card"><div class="label">✅ Healthy Sessions</div><div class="value green" id="healthySessions">0</div></div>
+        </div>
+
+        <div class="main-grid">
+
+            <div class="panel">
+                <div class="panel-title">
+                    📋 Task Manager
+                    <span class="badge" id="taskCountBadge">0 running</span>
+                </div>
+                <div id="taskList">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading tasks...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-title">
+                    🤖 Telegram Bot Control
+                    <span class="badge">8 Options</span>
+                </div>
+
+                <div class="telegram-panel">
+                    <h3>📱 Quick Actions</h3>
+                    <div class="telegram-btn-group">
+                        <button class="telegram-btn primary" onclick="openCreateTask()">➕ Create Task</button>
+                        <button class="telegram-btn info" onclick="openStopTask()">⏹ Stop Task</button>
+                        <button class="telegram-btn info" onclick="openDeleteTask()">🗑 Delete Task</button>
+                        <button class="telegram-btn info" onclick="openTaskDetails()">📄 Task Details</button>
+                    </div>
+                    <div class="telegram-btn-group mt-10">
+                        <button class="telegram-btn info" onclick="openAllTasks()">📋 All Tasks</button>
+                        <button class="telegram-btn info" onclick="openEditTask()">✏️ Edit Task</button>
+                        <button class="telegram-btn danger" onclick="openLogout()">🚪 Logout</button>
+                        <button class="telegram-btn primary" onclick="openAdminLogin()">👑 Admin Login</button>
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;padding:16px;background:#0a0a0a;border-radius:12px;">
+                    <div style="font-size:13px;color:#888;margin-bottom:10px;">Session Legend</div>
+                    <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                        <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span class="session-dot healthy" style="width:20px;height:20px;"></span> Healthy</span>
+                        <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span class="session-dot unhealthy" style="width:20px;height:20px;"></span> Unhealthy</span>
+                        <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span class="session-dot recovering" style="width:20px;height:20px;"></span> Recovering</span>
+                        <span style="display:flex;align-items:center;gap:6px;font-size:12px;"><span class="session-dot current" style="width:20px;height:20px;background:#333;"></span> Current</span>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div>🛡 Anti-Stop: <span class="highlight">Active</span></div>
+                    <div>🔄 AppState Recovery: Every 5 min</div>
+                    <div>🔑 Fresh Login: Every 10 min</div>
+                    <div>🕐 Cookie Refresh: Every 24h</div>
+                    <div>⏱ Stuck Restart: 3 min</div>
+                    <div>📦 Max Tasks: 5000</div>
+                    <div>👑 Owner: Raj Mishra</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:30px;text-align:center;font-size:12px;color:#333;border-top:1px solid #1a1a1a;padding-top:20px;">
+            ULTIMATE FB BOT v3.0 · Built with ❤️ by Raj Mishra · Per-Task Session Architecture
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ULTIMATE UI CONTROLLER - FULL INTEGRATION
+        // ============================================================
+
+        const API_BASE = '';
+        let refreshInterval = null;
+
+        function $(id) { return document.getElementById(id); }
+
+        function toast(msg, type = 'success') {
+            const el = $('toast');
+            el.textContent = msg;
+            el.className = `toast show ${type}`;
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => el.classList.remove('show'), 3500);
+        }
+
+        async function fetchStatus() {
+            try {
+                const res = await fetch('/api/status');
+                if (!res.ok) throw new Error('API error');
+                return await res.json();
+            } catch (e) {
+                console.error('Fetch error:', e);
+                return null;
+            }
+        }
+
+        async function refreshData() {
+            const data = await fetchStatus();
+            if (!data) {
+                toast('Failed to fetch data', 'error');
+                return;
+            }
+
+            $('totalTasks').textContent = data.totalTasks || 0;
+            $('runningTasks').textContent = data.tasks?.length || 0;
+            $('totalUsers').textContent = data.totalUsers || 0;
+            $('messagesSent').textContent = data.messagesSent || 0;
+            
+            let totalSess = 0, healthySess = 0;
+            if (data.tasks) {
+                for (const t of data.tasks) {
+                    if (t.sessions) {
+                        totalSess += t.sessions.total || 0;
+                        healthySess += t.sessions.healthy || 0;
+                    }
+                }
+            }
+            $('totalSessions').textContent = totalSess;
+            $('healthySessions').textContent = healthySess;
+
+            if (data.uptime) {
+                $('uptimeDisplay').textContent = formatUptime(data.uptime);
+            }
+
+            renderTasks(data.tasks || []);
+            $('taskCountBadge').textContent = `${data.tasks?.length || 0} running`;
+
+            const statusEl = $('statusText');
+            if (data.running) {
+                statusEl.textContent = 'ONLINE';
+                statusEl.style.color = '#69f0ae';
+            } else {
+                statusEl.textContent = 'OFFLINE';
+                statusEl.style.color = '#ff1744';
+            }
+        }
+
+        function renderTasks(tasks) {
+            const container = $('taskList');
+            if (!tasks || tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>No running tasks</p>
+                        <p style="font-size:13px;color:#444;">Create a task using the buttons above</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            for (const task of tasks) {
+                const sessions = task.sessions || { total: 0, healthy: 0, currentIndex: 1 };
+                const total = sessions.total || 0;
+                const healthy = sessions.healthy || 0;
+                const current = sessions.currentIndex || 1;
+
+                let dotsHtml = '';
+                for (let i = 0; i < Math.min(total, 20); i++) {
+                    let cls = 'session-dot';
+                    if (i < healthy) cls += ' healthy';
+                    else cls += ' unhealthy';
+                    if (i === (current - 1)) cls += ' current';
+                    dotsHtml += `<span class="${cls}" title="Session ${i+1}">${i+1}</span>`;
+                }
+                if (total > 20) dotsHtml += `<span class="session-dot" style="background:#333;">+${total-20}</span>`;
+
+                const statusClass = task.status || 'running';
+                const statusLabel = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+
+                html += `
+                    <div class="task-item">
+                        <div class="task-header">
+                            <span class="task-id">🔗 ${task.taskId || 'Unknown'}</span>
+                            <span class="task-user">👤 ${task.username || 'system'}</span>
+                            <span class="task-status ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="task-stats">
+                            <span>💬 <strong>${task.messages || 0}</strong> sent</span>
+                            <span>⏱ <strong>${formatUptimeS(task.uptimeSeconds || 0)}</strong></span>
+                            <span>🔄 <strong>${task.loopCount || 0}</strong> loops</span>
+                            <span>🍪 <strong>${healthy}/${total}</strong> sessions</span>
+                        </div>
+                        <div class="session-bar">${dotsHtml}</div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function formatUptime(seconds) {
+            seconds = Math.floor(seconds);
+            const d = Math.floor(seconds / 86400);
+            const h = Math.floor((seconds % 86400) / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            let parts = [];
+            if (d) parts.push(d+'d');
+            if (h) parts.push(h+'h');
+            if (m) parts.push(m+'m');
+            if (s || parts.length===0) parts.push(s+'s');
+            return parts.join(' ');
+        }
+
+        function formatUptimeS(seconds) {
+            return formatUptime(seconds);
+        }
+
+        function openModal(title, bodyHtml) {
+            $('modalTitle').textContent = title;
+            $('modalBody').innerHTML = bodyHtml;
+            $('modalOverlay').classList.add('active');
+        }
+
+        function closeModal() {
+            $('modalOverlay').classList.remove('active');
+        }
+
+        $('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === $('modalOverlay')) closeModal();
+        });
+
+        // ========== CREATE TASK ==========
+        function openCreateTask() {
+            openModal('➕ Create New Task', `
+                <label>Cookies (one per line)</label>
+                <textarea id="taskCookies" placeholder="cookie1&#10;cookie2&#10;cookie3"></textarea>
+                <label>Conversation ID</label>
+                <input id="taskConvo" placeholder="Enter thread/convo ID">
+                <label>Messages (one per line)</label>
+                <textarea id="taskMessages" placeholder="Hello&#10;Hi there&#10;Good morning"></textarea>
+                <label>Haters Names (one per line)</label>
+                <textarea id="taskHaters" placeholder="Raj&#10;Amit&#10;Sneha"></textarea>
+                <label>Last Names (one per line)</label>
+                <textarea id="taskLastnames" placeholder="Mishra&#10;Sharma&#10;Patel"></textarea>
+                <label>Delay (seconds)</label>
+                <input id="taskDelay" type="number" value="10" min="1" max="3600">
+                <label>Expiry (e.g., 5 days, 1 month)</label>
+                <input id="taskExpiry" placeholder="5 days">
+                <button class="submit-btn" onclick="createTask()">🚀 Create & Start Task</button>
+            `);
+        }
+
+        async function createTask() {
+            const cookies = $('taskCookies').value.trim();
+            const convoId = $('taskConvo').value.trim();
+            const messages = $('taskMessages').value.split('\n').filter(s => s.trim());
+            const haters = $('taskHaters').value.split('\n').filter(s => s.trim());
+            const lastnames = $('taskLastnames').value.split('\n').filter(s => s.trim());
+            const delay = parseInt($('taskDelay').value) || 10;
+            const expiry = $('taskExpiry').value.trim() || '30 days';
+
+            if (!cookies || !convoId || messages.length === 0 || haters.length === 0 || lastnames.length === 0) {
+                toast('Please fill all fields', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/create-task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cookies, convoId, messages, haters, lastnames, delay, expiry
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(`✅ Task created: ${data.taskId}`);
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Failed to create task'), 'error');
+                }
+            } catch (e) {
+                toast('❌ Network error', 'error');
+            }
+        }
+
+        // ========== STOP TASK ==========
+        function openStopTask() {
+            openModal('⏹ Stop Task', `
+                <label>Enter Task ID to stop</label>
+                <input id="stopTaskId" placeholder="e.g., RAJ MISHRA 12345678">
+                <button class="submit-btn" onclick="stopTask()">⏹ Stop Task</button>
+            `);
+        }
+
+        async function stopTask() {
+            const taskId = $('stopTaskId').value.trim();
+            if (!taskId) { toast('Enter Task ID', 'error'); return; }
+            try {
+                const res = await fetch('/api/stop-task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ taskId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(`✅ Stopped: ${taskId}`);
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Failed'), 'error');
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== DELETE TASK ==========
+        function openDeleteTask() {
+            openModal('🗑 Delete Task', `
+                <label>Enter Task ID to delete</label>
+                <input id="deleteTaskId" placeholder="e.g., RAJ MISHRA 12345678">
+                <button class="submit-btn" onclick="deleteTask()">🗑 Delete Task</button>
+            `);
+        }
+
+        async function deleteTask() {
+            const taskId = $('deleteTaskId').value.trim();
+            if (!taskId) { toast('Enter Task ID', 'error'); return; }
+            try {
+                const res = await fetch('/api/delete-task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ taskId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(`✅ Deleted: ${taskId}`);
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Failed'), 'error');
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== TASK DETAILS ==========
+        function openTaskDetails() {
+            openModal('📄 Task Details', `
+                <label>Enter Task ID</label>
+                <input id="detailTaskId" placeholder="e.g., RAJ MISHRA 12345678">
+                <button class="submit-btn" onclick="getTaskDetails()">🔍 Get Details</button>
+                <div id="detailResult" style="margin-top:16px;font-size:13px;color:#888;"></div>
+            `);
+        }
+
+        async function getTaskDetails() {
+            const taskId = $('detailTaskId').value.trim();
+            if (!taskId) { toast('Enter Task ID', 'error'); return; }
+            try {
+                const res = await fetch(`/api/task-details?taskId=${encodeURIComponent(taskId)}`);
+                const data = await res.json();
+                if (data.success && data.task) {
+                    const t = data.task;
+                    $('detailResult').innerHTML = `
+                        <div style="background:#0a0a0a;padding:14px;border-radius:10px;color:#ccc;line-height:1.8;">
+                            <strong style="color:#ffd700;">📌 ${t.taskId}</strong><br>
+                            👤 User: ${t.username || 'N/A'}<br>
+                            📊 Status: <span style="color:${t.status === 'running' ? '#69f0ae' : '#ff8a80'}">${t.status}</span><br>
+                            💬 Messages: ${t.messagesSent || 0}<br>
+                            🔄 Loop: ${t.loopCount || 0}<br>
+                            ⏱ Uptime: ${t.uptime || '0s'}<br>
+                            🍪 Sessions: ${t.sessionStats ? `${t.sessionStats.healthy}/${t.sessionStats.total}` : 'N/A'}<br>
+                            ⏰ Expiry: ${t.expiryText || 'N/A'}
+                            ${t.lastSuccess ? `<br>📅 Last Success: ${new Date(t.lastSuccess).toLocaleString()}` : ''}
+                        </div>
+                    `;
+                } else {
+                    $('detailResult').innerHTML = `<span style="color:#ff1744;">❌ ${data.error || 'Not found'}</span>`;
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== ALL TASKS ==========
+        function openAllTasks() {
+            openModal('📋 All Active Tasks', `
+                <div id="allTasksList">
+                    <div class="loading"><div class="spinner"></div><p>Loading...</p></div>
+                </div>
+                <button class="submit-btn" onclick="refreshAllTasksList()">🔄 Refresh</button>
+            `);
+            refreshAllTasksList();
+        }
+
+        async function refreshAllTasksList() {
+            try {
+                const res = await fetch('/api/status');
+                const data = await res.json();
+                const tasks = data.tasks || [];
+                if (tasks.length === 0) {
+                    $('allTasksList').innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>No running tasks</p></div>`;
+                    return;
+                }
+                let html = '';
+                for (const t of tasks) {
+                    html += `
+                        <div style="background:#0a0a0a;padding:12px 14px;border-radius:10px;margin-bottom:8px;border-left:3px solid #ffd700;font-size:13px;">
+                            <div><strong style="color:#ffd700;">${t.taskId}</strong> <span style="color:#888;">👤 ${t.username || 'N/A'}</span></div>
+                            <div style="color:#888;font-size:12px;margin-top:4px;">
+                                💬 ${t.messages || 0} msgs · 🔄 ${t.loopCount || 0} loops · ⏱ ${formatUptimeS(t.uptimeSeconds || 0)}
+                                · 🍪 ${t.sessions?.healthy || 0}/${t.sessions?.total || 0}
+                            </div>
+                        </div>
+                    `;
+                }
+                $('allTasksList').innerHTML = html;
+            } catch (e) {
+                $('allTasksList').innerHTML = `<span style="color:#ff1744;">❌ Failed to load</span>`;
+            }
+        }
+
+        // ========== EDIT TASK ==========
+        function openEditTask() {
+            openModal('✏️ Edit Task', `
+                <label>Enter Task ID to edit</label>
+                <input id="editTaskId" placeholder="e.g., RAJ MISHRA 12345678">
+                <label>New Delay (seconds)</label>
+                <input id="editDelay" type="number" value="10" min="1">
+                <button class="submit-btn" onclick="editTask()">✏️ Update Task</button>
+            `);
+        }
+
+        async function editTask() {
+            const taskId = $('editTaskId').value.trim();
+            const delay = parseInt($('editDelay').value) || 10;
+            if (!taskId) { toast('Enter Task ID', 'error'); return; }
+            try {
+                const res = await fetch('/api/edit-task', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ taskId, delay })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast(`✅ Updated: ${taskId}`);
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Failed'), 'error');
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== LOGOUT ==========
+        function openLogout() {
+            openModal('🚪 Logout', `
+                <p style="color:#aaa;">Are you sure you want to logout?</p>
+                <button class="submit-btn" onclick="logoutUser()" style="background:#ff1744;color:#fff;">🚪 Yes, Logout</button>
+                <button class="submit-btn" onclick="closeModal()" style="background:#333;color:#fff;margin-top:10px;">Cancel</button>
+            `);
+        }
+
+        async function logoutUser() {
+            try {
+                const res = await fetch('/api/logout', { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    toast('✅ Logged out');
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Failed'), 'error');
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== ADMIN LOGIN ==========
+        function openAdminLogin() {
+            openModal('👑 Admin Login', `
+                <label>Admin Username</label>
+                <input id="adminUser" value="raj mishra bot01">
+                <label>Admin Password</label>
+                <input id="adminPass" type="password" value="madhu 2003">
+                <button class="submit-btn" onclick="adminLogin()">👑 Login</button>
+            `);
+        }
+
+        async function adminLogin() {
+            const username = $('adminUser').value.trim();
+            const password = $('adminPass').value.trim();
+            if (!username || !password) { toast('Fill all fields', 'error'); return; }
+            try {
+                const res = await fetch('/api/admin-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    toast('✅ Admin logged in');
+                    closeModal();
+                    refreshData();
+                } else {
+                    toast('❌ ' + (data.error || 'Invalid credentials'), 'error');
+                }
+            } catch (e) { toast('❌ Network error', 'error'); }
+        }
+
+        // ========== INIT ==========
+        async function init() {
+            await refreshData();
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(refreshData, 10000);
+        }
+
+        window.openCreateTask = openCreateTask;
+        window.openStopTask = openStopTask;
+        window.openDeleteTask = openDeleteTask;
+        window.openTaskDetails = openTaskDetails;
+        window.openAllTasks = openAllTasks;
+        window.openEditTask = openEditTask;
+        window.openLogout = openLogout;
+        window.openAdminLogin = openAdminLogin;
+        window.createTask = createTask;
+        window.stopTask = stopTask;
+        window.deleteTask = deleteTask;
+        window.getTaskDetails = getTaskDetails;
+        window.refreshAllTasksList = refreshAllTasksList;
+        window.editTask = editTask;
+        window.logoutUser = logoutUser;
+        window.adminLogin = adminLogin;
+        window.refreshData = refreshData;
+        window.closeModal = closeModal;
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+</body>
+</html>
